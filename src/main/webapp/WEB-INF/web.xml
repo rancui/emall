@@ -86,7 +86,7 @@
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
 
-<!--二期新增重置session时间的filter-->
+<!--二期新增重置session有效期时间的filter-->
 <filter>
   <filter-name>SessionExpireFilter</filter-name>
   <filter-class>com.mall.controller.common.SessionExpireFilter</filter-class>
