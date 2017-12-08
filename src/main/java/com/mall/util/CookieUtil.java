@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by geely
+ * Created by rancui on 2017/11/30.
  */
 @Slf4j
 public class CookieUtil {

@@ -12,7 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/**
+/** 单点登录，重置session有效期
  * Created by rancui on 2017/12/4.
  */
 

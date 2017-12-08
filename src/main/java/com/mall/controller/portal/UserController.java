@@ -51,10 +51,11 @@ public class UserController {
         ServerResponse<User> response = iUserService.login(username,password);
 
         if(response.isSucess()){
-             //session.setAttribute(Const.CURRENT_USER,response.getData());
 
+            //设置cookie
             CookieUtil.setLoginToken(httpServletResponse,session.getId());
 
+            //存储到redis
             RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExpireTime.REDIS_SESSION_EXTIME);
 
         }

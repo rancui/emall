@@ -170,9 +170,7 @@ public class UserServiceImpl implements IUserService {
           int answerCount = userMapper.getAnswerByUserNameAndQuestion(username,question,answer);
 
           if(answerCount>0){
-             String TokenId = UUID.randomUUID().toString();
-//             TokenCache.setKeyValue(TokenCache.TOKEN_PREFIX+username,TokenId);
-
+              String TokenId = UUID.randomUUID().toString();
               RedisPoolUtil.setEx(Const.TOKEN_PREFIX+username,TokenId,60*60*12);
               return ServerResponse.createBySucessData(TokenId);
           }
