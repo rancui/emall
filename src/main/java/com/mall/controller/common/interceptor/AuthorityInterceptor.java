@@ -26,8 +26,9 @@ import java.util.Map;
 public class AuthorityInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
+        log.info("=================");
         log.info("preHandle");
-
+        log.info("==============");
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
         String className = handlerMethod.getBean().getClass().getSimpleName();//获取类名
