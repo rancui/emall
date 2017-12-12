@@ -1,8 +1,12 @@
 package com.mall.pojo;
 
+import org.springframework.stereotype.Component;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+@Component
+public class User implements Serializable {
     private Integer id;
 
     private String username;

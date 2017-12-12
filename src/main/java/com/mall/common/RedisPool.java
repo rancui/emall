@@ -8,7 +8,7 @@ import redis.clients.jedis.JedisPoolConfig;
 /**
  * Created by rancui on 2017/11/30.
  * <p>
- * Jedis和Redis连接池
+ * Jedis和Redis Server连接池
  */
 public class RedisPool {
 
