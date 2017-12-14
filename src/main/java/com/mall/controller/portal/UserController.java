@@ -1,6 +1,5 @@
 package com.mall.controller.portal;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.mall.common.Const;
 import com.mall.common.ServerResponse;
 import com.mall.defineAnnotation.ControllerAnotation;
@@ -8,7 +7,7 @@ import com.mall.pojo.User;
 import com.mall.service.IUserService;
 import com.mall.util.CookieUtil;
 import com.mall.util.JsonUtil;
-import com.mall.util.RedisPoolUtil;
+import com.mall.util.RedisShardedPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,13 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.ServletWrappingController;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+
 /**
  * Created by rancui on 2017/10/9.
  */
@@ -56,7 +53,7 @@ public class UserController {
             CookieUtil.setLoginToken(httpServletResponse,session.getId());
 
             //存储到redis
-            RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExpireTime.REDIS_SESSION_EXTIME);
+            RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExpireTime.REDIS_SESSION_EXTIME);
 
         }
 
@@ -73,7 +70,7 @@ public class UserController {
 
         String loginToken = CookieUtil.getLoginToken(request);
         CookieUtil.delLoginToken(request,response);
-        RedisPoolUtil.del(loginToken);
+        RedisShardedPoolUtil.del(loginToken);
         return ServerResponse.createBySucess();
 
     }
@@ -101,7 +98,7 @@ public class UserController {
              return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
          }
 
-         String jsonUserStr = RedisPoolUtil.get(loginToken);
+         String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
          User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -153,7 +150,7 @@ public class UserController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -179,7 +176,7 @@ public class UserController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User currentUser = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -194,7 +191,7 @@ public class UserController {
 
          if(userServerResponse.isSucess()){
              userServerResponse.getData().setUsername(currentUser.getUsername()); // 因为返回来的userServerResponse中没有username
-             RedisPoolUtil.setEx(loginToken, JsonUtil.obj2String(userServerResponse.getData()),Const.RedisCacheExpireTime.REDIS_SESSION_EXTIME);
+             RedisShardedPoolUtil.setEx(loginToken, JsonUtil.obj2String(userServerResponse.getData()),Const.RedisCacheExpireTime.REDIS_SESSION_EXTIME);
 
          }
 
@@ -215,7 +212,7 @@ public class UserController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 

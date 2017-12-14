@@ -2,13 +2,8 @@ package com.mall.controller.portal;
 
 import com.mall.common.Const;
 import com.mall.common.ServerResponse;
-import com.mall.defineAnnotation.ControllerAnotation;
 import com.mall.pojo.User;
 import com.mall.service.IUserService;
-import com.mall.util.CookieUtil;
-import com.mall.util.JsonUtil;
-import com.mall.util.RedisPoolUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -48,7 +43,7 @@ public class UserSpringSessionController {
 //            CookieUtil.setLoginToken(httpServletResponse,session.getId());
 //
 //            //存储到redis
-//            RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExpireTime.REDIS_SESSION_EXTIME);
+//            RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExpireTime.REDIS_SESSION_EXTIME);
 
 
         }
@@ -66,7 +61,7 @@ public class UserSpringSessionController {
 
 //        String loginToken = CookieUtil.getLoginToken(request);
 //        CookieUtil.delLoginToken(request,response);
-//        RedisPoolUtil.del(loginToken);
+//        RedisShardedPoolUtil.del(loginToken);
 //        return ServerResponse.createBySucess();
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySucess();
@@ -87,7 +82,7 @@ public class UserSpringSessionController {
 //             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
 //         }
 //
-//         String jsonUserStr = RedisPoolUtil.get(loginToken);
+//         String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 //
 //         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 //

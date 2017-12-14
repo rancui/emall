@@ -11,7 +11,7 @@ import com.mall.service.IUserService;
 import com.mall.util.CookieUtil;
 import com.mall.util.JsonUtil;
 import com.mall.util.PropertiesUtil;
-import com.mall.util.RedisPoolUtil;
+import com.mall.util.RedisShardedPoolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -50,7 +49,7 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -78,7 +77,7 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -103,7 +102,7 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -135,7 +134,7 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -163,7 +162,7 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -196,7 +195,7 @@ public class ProductManageController {
             return ServerResponse.createByErrorMessage("当前用户尚未登录，获取不到信息");
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
@@ -240,7 +239,7 @@ public class ProductManageController {
             return resultMap;
         }
 
-        String jsonUserStr = RedisPoolUtil.get(loginToken);
+        String jsonUserStr = RedisShardedPoolUtil.get(loginToken);
 
         User user = JsonUtil.string2Obj(jsonUserStr,User.class);
 
