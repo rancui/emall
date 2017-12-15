@@ -250,7 +250,7 @@ public class UserServiceImpl implements IUserService {
                 return ServerResponse.createBySucessMessage("更新密码成功");
          }
 
-         return ServerResponse.createByErrorMessage("更新密码");
+         return ServerResponse.createByErrorMessage("更新密码失败");
 
 
     }
