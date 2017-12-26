@@ -95,7 +95,7 @@ public class CategoryServiceImpl implements ICategoryService{
 
 
     /**
-     * 查找子节点，兄弟类
+     * 根据parentId查找子节点
      * @param parentId 父类id
      * @return
      */

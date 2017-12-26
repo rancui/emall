@@ -161,18 +161,18 @@ public class ProductServiceImpl implements IProductService {
        PageHelper.startPage(pageNum,pageSize);
        List<Product> productList = productMapper.selectByCategoryId(categoryId);
 
-       List<ProductBrifVo> productListVoList = Lists.newArrayList();
+       List<ProductBrifVo> productBrifVoList = Lists.newArrayList();
 
        for(Product product: productList){
 
-           ProductBrifVo productListVo = assembleProductBrifVo(product);
-           productListVoList.add(productListVo);
+           ProductBrifVo productBrifVo = assembleProductBrifVo(product);
+           productBrifVoList.add(productBrifVo);
 
        }
 
        PageInfo pageInfo = new PageInfo(productList);
 
-       pageInfo.setList(productListVoList);
+       pageInfo.setList(productBrifVoList);
 
        return ServerResponse.createBySucessData(pageInfo);
 
