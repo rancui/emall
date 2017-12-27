@@ -14,11 +14,12 @@
         <property name="maxInactiveIntervalInSeconds" value="1800"/>
     </bean>
 
+    <!--jediPool配置-->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxTotal" value="20"/>
     </bean>
 
-
+<!--jedis连接工厂-->
    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
        <property name="hostName" value="localhost"/>
        <property name="port" value="6379"/>

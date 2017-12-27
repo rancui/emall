@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by rancui on 2017/11/30.
  * <p>
- * Jedis和Redis Server连接池
+ * Redis Server连接池
  */
 public class RedisShardedPool {
 
@@ -57,7 +57,7 @@ public class RedisShardedPool {
     }
 
 
-    static {
+      static {
         initPool();
     }
 
