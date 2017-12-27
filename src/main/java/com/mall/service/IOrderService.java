@@ -21,4 +21,10 @@ public interface IOrderService {
 
 
     ServerResponse pay(long orderNo, Integer userId, String path);
+
+
+    //二期，定时关单
+    void closeOrderSchedule(int hour);
+
+
 }

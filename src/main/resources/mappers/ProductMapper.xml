@@ -238,7 +238,15 @@
 
   </select>
 
+<select id="selectStockByProductId" parameterType="int" resultType="java.lang.Integer">
 
+    SELECT
+    stock
+    FROM mmall_product
+    WHERE id = #{id,jdbcType=INTEGER}
+    for update
+
+</select>
 
 
 

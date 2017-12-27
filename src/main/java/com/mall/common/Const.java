@@ -15,6 +15,9 @@ public class Const {
     public static  final  String  TOKEN = "token";
     public static final String TOKEN_PREFIX = "token_";
 
+    /**
+     * redis缓存过期时间
+     */
     public  interface  RedisCacheExpireTime{
 
         int REDIS_SESSION_EXTIME = 60*30;//30分钟
@@ -23,7 +26,9 @@ public class Const {
     }
 
 
-
+    /**
+     * 返回状态码
+     */
     public enum ResponseCode {
         SUCCESS(1,"SUCCESS"),
         ERROR(0,"ERROR"),
@@ -46,6 +51,11 @@ public class Const {
         }
 
     }
+
+    /**
+     *  产品是否在线 0-已下架，1-在线
+     *
+     */
     public enum ProductStatusEnum{
         ON_SALE(1,"在线");
         private String value;
@@ -64,6 +74,9 @@ public class Const {
         }
     }
 
+    /**
+     * 购物车是否选中状态
+     */
     public interface Cart{
         int CHECKED = 1;//即购物车选中状态
         int UN_CHECKED = 0;//购物车中未选中状态
@@ -71,17 +84,28 @@ public class Const {
         String LIMIT_NUM_FAIL = "LIMIT_NUM_FAIL";
         String LIMIT_NUM_SUCCESS = "LIMIT_NUM_SUCCESS";
     }
+
+    /**
+     * 用户权限
+     */
     public interface Role{
         int ROLE_CUSTOMER = 0; //普通用户
         int ROLE_ADMIN = 1;//管理员
     }
 
 
+    /**
+     *  产品列表排序
+     */
 
     public interface ProductListOrderBy{
         Set<String> PRICE_ASC_DESC = Sets.newHashSet("price_desc","price_asc");
     }
 
+    /**
+    *  支付类型
+    *
+    */
     public enum PaymentTypeEnum{
         ONLINE_PAY(1,"在线支付");
 
@@ -112,7 +136,9 @@ public class Const {
 
     }
 
-
+    /**
+     * 订单状态
+     */
     public enum OrderStatusEnum{
         CANCELED(0,"已取消"),
         NO_PAY(10,"未支付"),

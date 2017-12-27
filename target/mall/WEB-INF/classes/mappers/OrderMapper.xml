@@ -238,9 +238,26 @@
 
 
 
+<select id="selectCloseOrderByStatusAndCloseTime" parameterType="map" resultMap="BaseResultMap">
 
+  SELECT
+  <include refid="Base_Column_List"/>
+  FROM mmall_order
+  WHERE status=#{status}
+  <![CDATA[
+  and create_time<=#{closeTime}
+  ]]>
+  order by create_time desc
 
+</select>
 
+<update id="closeOrderByOrderId" parameterType="int">
+
+  UPDATE mmall_order
+  SET status = 0
+  WHERE id = #{orderId}
+
+</update>
 
 
 

@@ -29,6 +29,7 @@ import com.mall.vo.OrderVo;
 import com.mall.vo.ShippingVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -605,65 +606,7 @@ public class OrderServiceImpl implements IOrderService {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /*********************以下是后台接口的方法实现***************************/
+    /*********************以下是后台接口的方法实现***************************/
 
 
     /***
@@ -730,16 +673,40 @@ public class OrderServiceImpl implements IOrderService {
     }
 
 
+    /**
+     *  定时关单
+     * @param hour 多久时间内没支付
+     */
 
+    @Override
+    public void closeOrderSchedule(int hour) {
+        Date closeTime = DateUtils.addHours(new Date(),-hour);
 
+        //查询出未支付的订单列表
+        List<Order> orderList = orderMapper.selectCloseOrderByStatusAndCloseTime(Const.OrderStatusEnum.NO_PAY.getCode(),DateTimeUtil.dateToStr(closeTime));
 
+        for (Order order:orderList){
 
+            List<OrderItem> orderItemList = orderItemMapper.selectByOrderNo(order.getOrderNo());
 
+            for(OrderItem orderItem:orderItemList){
 
+                Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
 
+                if(stock==null){
+                    continue;
+                }
+                Product product = new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stock+orderItem.getQuantity());
 
+                productMapper.updateByPrimaryKeySelective(product);
 
+            }
 
+            orderMapper.closeOrderByOrderId(order.getId());
+        }
+    }
 
 
 
