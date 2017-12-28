@@ -43,6 +43,7 @@ public class RedisShardedPoolUtil {
      * @param value
      * @return
      */
+
     public static String set(String key,String value){
         ShardedJedis jedis = null;
         String result = null;
@@ -59,6 +60,27 @@ public class RedisShardedPoolUtil {
         return result;
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public static Long setnx(String key,String value){
+        ShardedJedis jedis = null;
+        Long result = null;
+
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.setnx(key,value);
+        } catch (Exception e) {
+            log.error("setnx key:{} value:{} error",key,value,e);
+            RedisShardedPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisShardedPool.returnResource(jedis);
+        return result;
+    }
 
     /**
      * 设置带有有效期的key-value
@@ -84,7 +106,6 @@ public class RedisShardedPoolUtil {
         RedisShardedPool.returnResource(jedis);
         return result;
 
-
     }
 
     /**
@@ -107,6 +128,26 @@ public class RedisShardedPoolUtil {
         return result;
     }
 
+    /**
+     *  调用该方法会同时返回一个先前的值
+     * @param key
+     * @return
+     */
+
+    public static String getSet(String key,String value){
+        ShardedJedis jedis = null;
+        String result = null;
+        try {
+            jedis = RedisShardedPool.getJedis();
+            result = jedis.getSet(key,value);
+        } catch (Exception e) {
+            log.error("getset key:{} error",key,e);
+            RedisShardedPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisShardedPool.returnResource(jedis);
+        return result;
+    }
     /**
      * 删除value
      * @param key

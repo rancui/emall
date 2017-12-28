@@ -674,8 +674,8 @@ public class OrderServiceImpl implements IOrderService {
 
 
     /**
-     *  定时关单
-     * @param hour 多久时间内没支付
+     *  定时关单，参数是小时。关闭hour个小时之内未付款的订单
+     * @param hour
      */
 
     @Override
