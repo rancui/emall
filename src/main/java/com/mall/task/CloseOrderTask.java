@@ -1,23 +1,28 @@
 package com.mall.task;
 
 import com.mall.common.Const;
+import com.mall.common.RedissonManage;
 import com.mall.pojo.Product;
 import com.mall.service.IOrderService;
 import com.mall.util.PropertiesUtil;
 import com.mall.util.RedisShardedPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
 public class CloseOrderTask {
 
     @Autowired
-
     private IOrderService iOrderService;
+    @Autowired
+    private RedissonManage redissonManage;
 
 //    @Scheduled(cron = "0 */1 * * * ?")
 //    public void closeOrderTaskV1(){
@@ -32,7 +37,7 @@ public class CloseOrderTask {
     /**
      * 防死锁之分布式锁
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+    //@Scheduled(cron = "0 */1 * * * ?")
     public void closeOrderTaskV2(){
         long lockTimeout = Long.parseLong(PropertiesUtil.getProperty("lock.timeout","50000"));
 
@@ -68,8 +73,36 @@ public class CloseOrderTask {
     }
 
 
+    /**
+     *  采用Redisson分布式锁
+     */
+    @Scheduled(cron = "0 */1 * * * ?")
+    public void closeOrderTaskV3(){
 
+        RLock rLock = redissonManage.getRedisson().getLock(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
 
+        boolean getLock = false;
+        try {
+            if(getLock==rLock.tryLock(0,5, TimeUnit.SECONDS)){
+                log.info("redisson分布式锁已获取到");
+                int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour"));
+                iOrderService.closeOrderSchedule(hour);
+
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            log.info("redisson分布式锁获取所失败：{}",e);
+        } finally {
+
+            if(!getLock){
+                return;
+            }
+            rLock.unlock();
+            log.info("redisson分布式锁释放");
+        }
+
+    }
 
 
 
