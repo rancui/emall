@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -32,7 +33,10 @@ public class CloseOrderTask {
 //        iOrderService.closeOrderSchedule(hour);
 //        log.info("关闭订单结束");
 //    }
-
+@PreDestroy
+private void delLock(){
+    RedisShardedPoolUtil.del(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+}
 
     /**
      * 防死锁之分布式锁
@@ -51,7 +55,7 @@ public class CloseOrderTask {
 
             //未获取到锁，继续判断,判断时间戳,看是否可以重置获取到锁
             String lockValueStr = RedisShardedPoolUtil.get(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
-            //如果lockValue不是空,并且当前时间大于锁的有效期,说明之前的lock的时间已超时,执行getset命令.
+            //如果lockValueStr不是空,并且当前时间大于锁的有效期,说明之前的lock的时间已超时,执行getset命令.
             if(lockValueStr!=null && System.currentTimeMillis()>Long.parseLong(lockValueStr)){
 
                 String getsetResult = RedisShardedPoolUtil.getSet(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,String.valueOf(System.currentTimeMillis()+lockTimeout));
@@ -105,16 +109,16 @@ public class CloseOrderTask {
     }
 
 
-
-
-
-
+    /**
+     * 关闭订单
+     * @param lockName 分布式锁的名称
+     */
  private void  closeOrder(String lockName){
 
      RedisShardedPoolUtil.expire(lockName,50);//有效期50秒
      int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
      log.info("====订单关闭开始===");
-     iOrderService.closeOrderSchedule(hour);
+     iOrderService.closeOrderSchedule(hour);// 关闭订单
      RedisShardedPoolUtil.del(lockName);
      log.info("====订单关闭结束===");
 
